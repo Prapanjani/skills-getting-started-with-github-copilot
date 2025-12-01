@@ -46,16 +46,62 @@ activities = {
 def root():
     return RedirectResponse(url="/static/index.html")
 
+    
+    
 
 @app.get("/activities")
 def get_activities():
+    # Additional activities
+    activities.update({
+        "Basketball Team": {
+            "description": "Join the basketball team and compete in local tournaments",
+            "schedule": "Mondays and Wednesdays, 4:00 PM - 6:00 PM",
+            "max_participants": 15,
+            "participants": []
+        },
+        "Soccer Club": {
+            "description": "Practice soccer skills and participate in matches",
+            "schedule": "Tuesdays and Thursdays, 5:00 PM - 7:00 PM",
+            "max_participants": 20,
+            "participants": []
+        },
+        "Art Club": {
+            "description": "Explore various art techniques and create projects",
+            "schedule": "Fridays, 3:00 PM - 5:00 PM",
+            "max_participants": 10,
+            "participants": []
+        },
+        "Drama Club": {
+            "description": "Participate in theater productions and improve acting skills",
+            "schedule": "Thursdays, 4:00 PM - 6:00 PM",
+            "max_participants": 15,
+            "participants": []
+        },
+        "Debate Team": {
+            "description": "Engage in debates and improve public speaking skills",
+            "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+            "max_participants": 12,
+            "participants": []
+        },
+        "Math Club": {
+            "description": "Solve challenging math problems and participate in competitions",
+            "schedule": "Tuesdays, 3:00 PM - 4:30 PM",
+            "max_participants": 20,
+            "participants": []
+        }
+    })
     return activities
 
 
 @app.post("/activities/{activity_name}/signup")
+
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
     # Validate activity exists
+    # Check if activity is at max capacity
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is at maximum capacity")
+
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
 
@@ -63,5 +109,9 @@ def signup_for_activity(activity_name: str, email: str):
     activity = activities[activity_name]
 
     # Add student
+    # Validate student is not already signed up for the activity
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up for this activity")
+    
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
