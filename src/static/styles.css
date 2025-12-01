@@ -158,8 +158,8 @@ footer {
 
 .participants {
   margin: 0;
-  padding-left: 20px;
-  list-style: disc;
+  padding-left: 0;
+  list-style: none;
 }
 
 .participants li {
@@ -170,6 +170,27 @@ footer {
   border: 1px solid #f0f0f0;
   color: #444;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.participant-email {
+  word-break: break-all;
+}
+
+.unregister-button {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.unregister-button:hover {
+  background: #ffecec;
 }
 
 /* Message when there are no participants */
